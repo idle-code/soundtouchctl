@@ -63,9 +63,14 @@ if __name__ == '__main__':
     elif args.action == 'volume_transition':
         volume_transition(dev, args.from_level, args.to_level, args.duration)
     elif args.action == 'smooth_on':
-        volume_set(dev, 0)
+        # Speaker always start with volume around ~15,
+        # which causes the first volume change instruction to be ignored.
+        # Following set to 30 overrides that - speaker startsup with provided volume
+        # which is immediately overriden by transition routine.
+        volume_set(dev, 30)
+
         power_set(dev, True)
-        volume_transition(dev, 0, args.to_level, args.duration)
+        volume_transition(dev, 1, args.to_level, args.duration)
     else:
         parser.print_help()
 
